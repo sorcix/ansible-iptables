@@ -1,0 +1,22 @@
+---
+
+iptables_ssh_ports:
+  - 22
+  - 2222
+
+# When at least one IPv4 or IPv6 address is whitelisted
+# all other connections to the SSH ports will be rejected.
+iptables_ssh_ipv4_whitelist: []
+iptables_ssh_ipv6_whitelist: []
+
+iptables_tcp_ports: []
+iptables_udp_ports: []
+iptables_rules: []
+
+iptables_ipv4_tcp_ports: []
+iptables_ipv4_udp_ports: []
+iptables_ipv4_rules: []
+
+iptables_ipv6_tcp_ports: []
+iptables_ipv6_udp_ports: []
+iptables_ipv6_rules: []

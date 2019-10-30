@@ -1,0 +1,51 @@
+*filter
+
+:INPUT DROP [0:0]
+:FORWARD DROP [0:0]
+:OUTPUT ACCEPT [0:0]
+
+:TCP - [0:0]
+:UDP - [0:0]
+:SSH - [0:0]
+
+-A INPUT -i lo -j ACCEPT
+-A INPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+-A INPUT -m conntrack --ctstate INVALID -j DROP
+-A INPUT -p icmp -j ACCEPT
+
+-A INPUT -m recent --update --rsource --seconds 600 --hitcount 3 --name PORTSCAN4 -j DROP
+-A INPUT -m recent --update --rsource --seconds 600 --name SSH4 -j DROP
+
+-A INPUT -p udp -m conntrack --ctstate NEW -j UDP
+-A INPUT -p udp -m recent --set --rsource --name PORTSCAN4 -j REJECT --reject-with icmp-port-unreachable
+
+-A INPUT -p tcp --syn -m conntrack --ctstate NEW -j TCP
+-A INPUT -p tcp -m recent --set --rsource --name PORTSCAN4 -j REJECT --reject-with tcp-reset
+
+-A INPUT -j REJECT --reject-with icmp-proto-unreachable
+
+{% for port in iptables_ssh_ports %}
+-A TCP -p tcp --dport {{ port }} -j SSH
+{% endfor -%}
+{% if iptables_ssh_ipv4_whitelist|length > 0 or iptables_ssh_ipv6_whitelist|length > 0 %}
+{% for source in iptables_ssh_ipv4_whitelist %}
+-A SSH -s {{ source }} -j ACCEPT
+{% endfor %}
+-A SSH -m recent --set --rsource --name SSH4 -j REJECT --reject-with tcp-reset
+{% else %}
+-A SSH -j ACCEPT
+{% endif %}
+
+{% for port in (iptables_tcp_ports + iptables_ipv4_tcp_ports) %}
+-A TCP -p tcp -m tcp --dport {{ port }} -j ACCEPT
+{% endfor %}
+
+{% for port in (iptables_udp_ports + iptables_ipv4_udp_ports) %}
+-A UDP -p udp -m udp --dport {{ port }} -j ACCEPT
+{% endfor %}
+
+{% for rule in (iptables_rules + iptables_ipv4_rules) %}
+{{ rule }}
+{% endfor %}
+
+COMMIT

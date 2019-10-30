@@ -1,0 +1,25 @@
+---
+
+- name: "create the iptables rules directory"
+  file:
+    path: "/etc/iptables.TEST"
+    owner: "root"
+    group: "root"
+    mode: "0700"
+    state: "directory"
+
+- name: "save IPv4 rules"
+  template:
+    src: "iptables.rules.j2"
+    dest: "/etc/iptables.TEST/iptables.rules"
+    owner: "root"
+    group: "root"
+    mode: "0400"
+
+- name: "save IPv6 rules"
+  template:
+    src: "ip6tables.rules.j2"
+    dest: "/etc/iptables.TEST/ip6tables.rules"
+    owner: "root"
+    group: "root"
+    mode: "0400"
