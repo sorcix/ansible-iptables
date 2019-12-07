@@ -31,7 +31,7 @@
 {% for source in iptables_ssh_ipv4_whitelist %}
 -A SSH -s {{ source }} -j ACCEPT
 {% endfor %}
--A SSH -m recent --set --rsource --name SSH4 -j REJECT --reject-with tcp-reset
+-A SSH -p tcp -m recent --set --rsource --name SSH4 -j REJECT --reject-with tcp-reset
 {% else %}
 -A SSH -j ACCEPT
 {% endif %}
