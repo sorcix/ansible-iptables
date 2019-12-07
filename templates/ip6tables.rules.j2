@@ -11,7 +11,7 @@
 -A INPUT -i lo -j ACCEPT
 -A INPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
 -A INPUT -m conntrack --ctstate INVALID -j DROP
--A INPUT -p icmp -j ACCEPT
+-A INPUT -p ipv6-icmp -j ACCEPT
 
 -A INPUT -m recent --update --rsource --seconds 600 --hitcount 3 --name PORTSCAN6 -j DROP
 -A INPUT -m recent --update --rsource --seconds 600 --name SSH6 -j DROP
