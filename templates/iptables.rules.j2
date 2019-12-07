@@ -13,8 +13,8 @@
 -A INPUT -m conntrack --ctstate INVALID -j DROP
 -A INPUT -p icmp -j ACCEPT
 
--A INPUT -m recent --update --rsource --seconds 600 --hitcount 3 --name PORTSCAN4 -j DROP
--A INPUT -m recent --update --rsource --seconds 600 --name SSH4 -j DROP
+-A INPUT -m recent --update --rsource --seconds 3600 --reap --hitcount 5 --name PORTSCAN4 -j DROP
+-A INPUT -m recent --update --rsource --seconds 3600 --reap --hitcount 3 --name SSH4 -j DROP
 
 -A INPUT -p udp -m conntrack --ctstate NEW -j UDP
 -A INPUT -p udp -m recent --set --rsource --name PORTSCAN4 -j REJECT --reject-with icmp-port-unreachable
