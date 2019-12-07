@@ -2,7 +2,7 @@
 
 - name: "create the iptables rules directory"
   file:
-    path: "/etc/iptables.TEST"
+    path: "/etc/iptables"
     owner: "root"
     group: "root"
     mode: "0700"
@@ -11,7 +11,7 @@
 - name: "save IPv4 rules"
   template:
     src: "iptables.rules.j2"
-    dest: "/etc/iptables.TEST/iptables.rules"
+    dest: "/etc/iptables/iptables.rules"
     owner: "root"
     group: "root"
     mode: "0400"
@@ -19,7 +19,16 @@
 - name: "save IPv6 rules"
   template:
     src: "ip6tables.rules.j2"
-    dest: "/etc/iptables.TEST/ip6tables.rules"
+    dest: "/etc/iptables/ip6tables.rules"
     owner: "root"
     group: "root"
     mode: "0400"
+
+- name: "start iptables service"
+  service:
+    name: "{{ item }}"
+    enabled: yes
+    state: reloaded
+  with_items:
+    - "iptables"
+    - "ip6tables"
