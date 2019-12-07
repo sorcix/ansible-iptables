@@ -29,7 +29,7 @@
 {% endfor %}
 {% if iptables_ssh_ipv4_whitelist|length > 0 or iptables_ssh_ipv6_whitelist|length > 0 -%}
 {% for source in iptables_ssh_ipv6_whitelist -%}
--A SSH -s "{{ source }}" -j ACCEPT
+-A SSH -s {{ source }} -j ACCEPT
 {% endfor %}
 -A SSH -p tcp -m recent --set --rsource --name SSH6 -j REJECT --reject-with tcp-reset
 {% else %}
