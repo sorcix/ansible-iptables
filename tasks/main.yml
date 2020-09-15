@@ -1,8 +1,22 @@
 ---
 
+- name: "include distribution-specific variables"
+  include_vars: "{{ item }}"
+  with_first_found:
+    - "{{ ansible_distribution | lower }}-{{ ansible_distribution_release | lower }}.yml"
+    - "{{ ansible_distribution | lower }}.yml"
+    - "{{ ansible_os_family }}.yml"
+    - "default.yml"
+
+- name: "install iptables"
+  package:
+    name: "{{ item }}"
+    state: latest
+  with_items: "{{ iptables_packages }}"
+
 - name: "create the iptables rules directory"
   file:
-    path: "/etc/iptables"
+    path: "{{ iptables_rules_directory }}"
     owner: "root"
     group: "root"
     mode: "0700"
@@ -11,24 +25,26 @@
 - name: "save IPv4 rules"
   template:
     src: "iptables.rules.j2"
-    dest: "/etc/iptables/iptables.rules"
+    dest: "{{ iptables_ipv4_rules_file }}"
     owner: "root"
     group: "root"
     mode: "0400"
+  notify:
+    - "reload iptables-services"
 
 - name: "save IPv6 rules"
   template:
     src: "ip6tables.rules.j2"
-    dest: "/etc/iptables/ip6tables.rules"
+    dest: "{{ iptables_ipv6_rules_file }}"
     owner: "root"
     group: "root"
     mode: "0400"
+  notify:
+    - "reload iptables-services"
 
-- name: "start iptables service"
+- name: "start iptables services"
   service:
     name: "{{ item }}"
     enabled: yes
-    state: reloaded
-  with_items:
-    - "iptables"
-    - "ip6tables"
+    state: started
+  with_items: "{{ iptables_services }}"

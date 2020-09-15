@@ -1,0 +1,15 @@
+---
+
+iptables_supported: true
+
+iptables_packages:
+  - "iptables"
+  - "iptables-persistent"
+  - "netfilter-persistent"
+
+iptables_services:
+  - "netfilter-persistent"
+
+iptables_rules_directory: "/etc/iptables"
+iptables_ipv4_rules_file: "/etc/iptables/rules.v4"
+iptables_ipv6_rules_file: "/etc/iptables/rules.v6"

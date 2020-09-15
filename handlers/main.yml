@@ -1,0 +1,9 @@
+---
+
+- name: "reload iptables services"
+  listen: "reload iptables-services"
+  service:
+    name: "{{ item }}"
+    enabled: yes
+    state: restarted
+  with_items: "{{ iptables_services }}"
