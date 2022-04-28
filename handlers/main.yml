@@ -7,3 +7,8 @@
     enabled: yes
     state: restarted
   with_items: "{{ iptables_services }}"
+
+- name: "persist ipsets"
+  listen: "persist ipsets"
+  shell:
+    cmd: "ipset save > /etc/ipset.conf"

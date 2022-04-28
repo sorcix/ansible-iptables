@@ -22,6 +22,18 @@
     mode: "0700"
     state: "directory"
 
+- name: "create IPv4 blocklist ipset"
+  command:
+    cmd: "ipset create blocklistv4 hash:net hashsize 4096 family inet -exist"
+  notify:
+    - "persist ipsets"
+
+- name: "create IPv6 blocklist ipset"
+  command:
+    cmd: "ipset create blocklistv6 hash:net hashsize 4096 family inet6 -exist"
+  notify:
+    - "persist ipsets"
+
 - name: "save IPv4 rules"
   template:
     src: "iptables.rules.j2"

@@ -13,6 +13,8 @@
 -A INPUT -m conntrack --ctstate INVALID -j DROP
 -A INPUT -p icmp -j ACCEPT
 
+-A INPUT -m set --match-set blocklistv4 src -j DROP
+
 -A INPUT -m recent --update --rsource --seconds 3600 --reap --hitcount 5 --name PORTSCAN4 -j DROP
 -A INPUT -m recent --update --rsource --seconds 3600 --reap --hitcount 3 --name SSH4 -j DROP
 

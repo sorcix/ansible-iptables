@@ -4,10 +4,12 @@ iptables_supported: true
 
 iptables_packages:
   - "iptables"
+  - "ipset"
 
 iptables_services:
   - "iptables"
   - "ip6tables"
+  - "ipset"
 
 iptables_rules_directory: "/etc/iptables"
 iptables_ipv4_rules_file: "/etc/iptables/iptables.rules"
